@@ -39,11 +39,11 @@ In the end, in `CMAES/CMAES.csv` you can view a summary:
 
 ```
 root@53e2cbf63eb4:/app# cat CMAES/CMAES.csv 
-Problem(N=Dim D=Problem),Median, Best, Worst, Mean, Sd, Restarts
+Problem(N=Dim D=Problem),Median,Best,Worst,Mean,Sd,Restarts
 CEC2017 N=1 D=2,0,0,0,0,0,0
 CEC2017 N=2 D=2,100,100,100,100,0,0
 CEC2017 N=3 D=2,100,100,100,100,0,0
-[1] Calculation time[hours]:  0.0194931093189451 ,,,,,,
+Calculation time[hours]: 0.0167116 ,,,,,,
 ```
 
 You can also download the files from the container to your host - while having the container running, execute this in a second command line tab on your host:
