@@ -5,7 +5,7 @@ Institute of Computer Science, Warsaw University of Technology
 
 ## Installation
 
-Experiments were conducted using R version 4.3.1. We prepared the Dockerfile for reproducability.
+Experiments were conducted using R version 4.3.1. We prepared the Dockerfile for reproducibility.
 
 To use it, install e.g. podman (https://podman.io/docs/installation), on *nix:
 ```
