@@ -26,7 +26,7 @@ Start a container and step into it with bash:
 podman run -it --entrypoint bash cmaes
 ```
 
-Start a chosen script (`./startBench.sh`, `./stopBench.sh`, `./CEC26ranking.R`, `./complexity.R`, `./table.py`):
+Start a chosen script (`./startBench.sh`, `./stopBench.sh`, `./CEC26ranking.R`, `./complexity.R`, `./table.py`, `./txt2mat.py`):
 
 ```
 root@63344f184cc5:/app# ./startBench.sh CMAES 1 3 2
