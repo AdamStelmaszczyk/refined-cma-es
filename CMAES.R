@@ -64,7 +64,7 @@ best_of_random <- function(N, fn, lower, upper, n_samples = 100) {
   return(best_par)
 }
 
-
+# Implementation based on cmaes.R from https://cran.r-project.org/web/packages/cmaes by H. Trautmann, O. Mersmann, and D. Arnu
 cmaes <- function(par, fn, ..., lower, upper, control=list()) {
   norm <- function(x)
     drop(sqrt(crossprod(x)))
