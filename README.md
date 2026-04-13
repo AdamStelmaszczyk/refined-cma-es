@@ -32,7 +32,7 @@ Start a chosen script (`./startBench.sh`, `./stopBench.sh`, `./CEC26ranking.R`, 
 root@63344f184cc5:/app# ./startBench.sh CMAES 1 3 2
 ```
 
-`./startBench.sh` creates a dir `CMAES` benchmarking f1-f3 in 2 dimensions. This tiny benchmark runs in about a minute. Every CEC function runs in a separate process, so maximally there will be 29 processes (this will be capped by your maximium number of logical CPU cores). So in the begining, 3 processes for f1-f3 are spawn. f1 finishes its process with run 1, then f1 run 2 is spawned etc. You can view the processes in `top`.
+`./startBench.sh` creates a dir `CMAES` benchmarking f1-f3 in 2 dimensions. This tiny benchmark runs in about a minute. Every CEC function runs in a separate process, so maximally there will be 29 processes (this will be capped by your maximium number of logical CPU cores). So in the begining, 3 processes for f1-f3 are spawn. f1 finishes its process with run 1, then f1 run 2 is spawned etc. You can view the processes in `top` or `htop` (on host, not in the container).
 
 Data appears in the `CMAES/N` and `CMAES/M` directories. To view it you can use `ls`, `more`, `head` etc.
 In the end, in `CMAES/CMAES.csv` you can view a summary:
@@ -40,9 +40,10 @@ In the end, in `CMAES/CMAES.csv` you can view a summary:
 ```
 root@53e2cbf63eb4:/app# cat CMAES/CMAES.csv 
 Problem(N=Dim D=Problem),Median, Best, Worst, Mean, Sd, Restarts
-[1] CEC2017 N=1 D=2,0,0,0,0,0,0         CEC2017 N=2 D=2,100,100,100,100,0,0
-[3] CEC2017 N=3 D=2,100,100,100,100,0,0
-[1] Calculation time[hours]:  0.0194749187098609 ,,,,,,
+CEC2017 N=1 D=2,0,0,0,0,0,0
+CEC2017 N=2 D=2,100,100,100,100,0,0
+CEC2017 N=3 D=2,100,100,100,100,0,0
+[1] Calculation time[hours]:  0.0194931093189451 ,,,,,,
 ```
 
 You can also download the files from the container to your host - while having the container running, execute this in a second command line tab on your host:
