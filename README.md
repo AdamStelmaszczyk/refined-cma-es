@@ -5,7 +5,7 @@ Institute of Computer Science, Warsaw University of Technology
 
 ## Installation
 
-Experiments were conducted using R version 4.3.1. We prepared the Dockerfile for reproducibility.
+Experiments were conducted using R version 4.4.1. We prepared the Dockerfile for reproducibility.
 
 To use it, install e.g. podman (https://podman.io/docs/installation), on *nix:
 ```
@@ -16,7 +16,7 @@ Navigate to the directory containing `Dockerfile` and build a `cmaes` image (it 
 podman build -t cmaes .
 ```
 
-Alternatively, you can recreate the R environment on your host following the Dockerfile (you need to install R dependencies). But, make sure you have `R --version` 4.3.1.
+Alternatively, you can recreate the R environment on your host following the Dockerfile (you need to install R dependencies). But, make sure you have `R --version` 4.4.1.
 
 ## Running
 
@@ -32,7 +32,7 @@ Start a chosen script (`./startBench.sh`, `./stopBench.sh`, `./CEC26ranking.R`, 
 root@63344f184cc5:/app# ./startBench.sh CMAES 1 3 2
 ```
 
-`./startBench.sh` creates a dir `CMAES` benchmarking f1-f3 in 2 dimensions. This tiny benchmark runs in about a minute. Every CEC function runs in a separate process, so maximally there will be 29 processes (this will be capped by your maximium number of logical CPU cores). So in the begining, 3 processes for f1-f3 are spawn. f1 finishes its process with run 1, then f1 run 2 is spawned etc. You can view the processes in `top` or `htop` (on host, not in the container).
+`./startBench.sh` creates a dir `CMAES` benchmarking f1-f3 in 2 dimensions. This tiny benchmark runs in about a minute. Every CEC function runs in a separate process, so maximally there will be 29 processes (this will be capped by your maximium number of logical CPU cores). So in the begining, 3 processes for f1-f3 are spawn. f1 finishes its process with run 1, then f1 run 2 is spawned etc. You can view the processes in `top`.
 
 Data appears in the `CMAES/N` and `CMAES/M` directories. To view it you can use `ls`, `more`, `head` etc.
 In the end, in `CMAES/CMAES.csv` you can view a summary:

@@ -108,6 +108,8 @@ tex += r"""
 \end{document}
 """
 
+Path("tex").mkdir(exist_ok=True)
+
 tex_file = Path("tex/table.tex")
 tex_file.write_text(tex)
 
