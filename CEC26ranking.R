@@ -3,7 +3,7 @@
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) < 2) {
-  stop("Usage: Rscript rank.R ALG1 ALG2 [ALG3 ...]")
+  stop("Usage: ./CEC26ranking.R ALG1 ALG2 [ALG3 ...]")
 }
 
 algsNames <- args
