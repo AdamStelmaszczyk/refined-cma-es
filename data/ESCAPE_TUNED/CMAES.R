@@ -64,8 +64,8 @@ best_of_random <- function(N, fn, lower, upper, n_samples = 100) {
   return(best_par)
 }
 
-
-cmaes <- function(par, fn, ..., lower, upper, control=list()) {
+# Implementation based on cmaes.R from https://cran.r-project.org/web/packages/cmaes by H. Trautmann, O. Mersmann, and D. Arnu
+cmaes <- function(par, fn, ..., lower, upper, minimum, control=list()) {
   norm <- function(x)
     drop(sqrt(crossprod(x)))
 
@@ -97,13 +97,14 @@ cmaes <- function(par, fn, ..., lower, upper, control=list()) {
   ## Parameters:
   trace       <- controlParam("trace", FALSE)
   fnscale     <- controlParam("fnscale", 1)
-  stopfitness <- controlParam("stopfitness", -Inf)
+  stopfitness <- controlParam("stopfitness", minimum + 1e-8)
   budget      <- controlParam("budget", 10000*N )                     ## The maximum number of fitness function calls
   # sigma       <- controlParam("sigma", 0.5)
   sigma       <- controlParam("sigma", 7)
   sc_tolx     <- controlParam("stop.tolx", 1e-12)
   keep.best   <- controlParam("keep.best", TRUE)
   vectorized  <- controlParam("vectorized", FALSE)
+  # flat_escape <- controlParam("flat_escape", TRUE)
   flat_escape <- controlParam("flat_escape", FALSE)
   midpoint_freq <- controlParam("midpoint_freq", 0)
   ipop_restarts <- controlParam("ipop_restarts", 0)

@@ -14,6 +14,8 @@ def convert_txt_to_mat(folder):
     if not txt_files:
         print(f"No .txt files found in {folder}")
         return
+    mat_dir = os.path.join(folder, "mat")
+    os.makedirs(mat_dir, exist_ok=True)
     for filename in txt_files:
         txt_path = os.path.join(folder, filename)
         try:
@@ -21,9 +23,9 @@ def convert_txt_to_mat(folder):
             if data.shape != (1001, 25):
                 print(f"Warning: {filename} has shape {data.shape}, expected (1001, 25)")
             var_name = os.path.splitext(filename)[0]
-            mat_path = os.path.join(folder, var_name + '.mat')
+            mat_path = os.path.join(mat_dir, var_name + '.mat')
             savemat(mat_path, {var_name: data})
-            print(f"Converted {filename} -> {var_name}.mat")
+            print(f"Converted {filename} -> mat/{var_name}.mat")
         except Exception as e:
             print(f"Error processing {filename}: {e}")
 
@@ -32,4 +34,3 @@ if __name__ == "__main__":
     parser.add_argument("folder", help="Folder containing .txt files of a given algorithm")
     args = parser.parse_args()
     convert_txt_to_mat(args.folder)
-
