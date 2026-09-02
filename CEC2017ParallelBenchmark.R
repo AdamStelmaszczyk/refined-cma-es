@@ -13,8 +13,8 @@ benchmarkParallel <- function() {
 
   start.time  <- Sys.time()
 
-  # Minimal fitness values for each problem
-  scores <- seq(from = 100, to = 3000, by=100)
+  # Minimal fitness values for each problem (excluding F2, so no 200)
+  scores <- c(100, seq(from = 300, to = 3000, by = 100))
 
   # Calculate the number of cores
   no_cores <- detectCores() - 1
