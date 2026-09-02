@@ -5,6 +5,7 @@ ALG_ID <- args[1]
 f_from <- if (length(args) >= 2) as.numeric(args[2]) else 1
 f_to <- if (length(args) >= 3) as.numeric(args[3]) else 29
 DIM <- if (length(args) >= 4) as.numeric(args[4]) else 30
+PRECISION <- 1e-8
 
 benchmarkParallel <- function() {
   suppressMessages(library(foreach))
@@ -40,14 +41,12 @@ benchmarkParallel <- function() {
 						runif(d, -100, 100),
 						fn = function(x) {
 						  # cec17 without f2
-						  if (n == 1) {
-						    cec2017(1, x)
-						  } else {
-						    cec2017(n + 1, x)
-						  }
+						  val <- if (n == 1) cec2017(1, x) else cec2017(n + 1, x)
+						  if ((val - scores[n]) < PRECISION) scores[n] else val
 						},
 						lower = -100,
 						upper = 100,
+						minimum = scores[n],
 						control = list("diag.bestVal"=TRUE)
 					)
 				},
@@ -55,7 +54,10 @@ benchmarkParallel <- function() {
 					print(paste("Problem:", d, " ", cond))
 				})
 
-        resultVector <- c(resultVector, abs(result$value-scores[n]))
+			  final_err <- abs(result$value - scores[n])
+			  if (final_err < PRECISION) final_err <- 0
+			  resultVector <- c(resultVector, final_err)
+
         restarts <- c(restarts, result$restarts)
 
 			  # FE indices according to CEC: 0, 10D, 20D, ..., 10000D
@@ -70,7 +72,8 @@ benchmarkParallel <- function() {
 			    } else {
 			      idx <- min(fe, L)
 			    }
-			    informMatrix[bb, i] <- abs(bestVal[idx] - scores[n])
+			    err <- abs(bestVal[idx] - scores[n])
+			    informMatrix[bb, i] <- if (err < PRECISION) 0 else err
 			  }
       }
       write.table(resultVector, row.names = FALSE, col.names = FALSE, file = paste0(ALG_ID, "/N/N", n, "-D", d), sep = ",")
