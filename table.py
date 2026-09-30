@@ -96,17 +96,24 @@ for f_id in range(1, 30):  # functions 1..29
     pw_raw, log_pw_raw = format_p_and_log(p_w)
     pmw_raw, log_pmw_raw = format_p_and_log(p_mw)
 
-    # Primary decision criteria based on Mann-Whitney U test
-    bold_row = (p_mw <= 0.05) and not math.isnan(p_mw)
+    # Check significance (p <= 0.05)
+    bold_pw = (p_w <= 0.05) and not math.isnan(p_w)
+    bold_pmw = (p_mw <= 0.05) and not math.isnan(p_mw)
 
-    # Format Wilcoxon p-values
-    pw_tex = f"${pw_raw}$"
-    log_pw_tex = f"${log_pw_raw}$"
-    pw_md = pw_raw
-    log_pw_md = log_pw_raw
+    # Format Wilcoxon p-values (bold if significant)
+    if bold_pw:
+        pw_tex = r"$\textbf{" + pw_raw + r"}$"
+        log_pw_tex = r"$\textbf{" + log_pw_raw + r"}$"
+        pw_md = f"**{pw_raw}**"
+        log_pw_md = f"**{log_pw_raw}**"
+    else:
+        pw_tex = f"${pw_raw}$"
+        log_pw_tex = f"${log_pw_raw}$"
+        pw_md = pw_raw
+        log_pw_md = log_pw_raw
 
     # Format Mann-Whitney p-values (bold if significant)
-    if bold_row:
+    if bold_pmw:
         pmw_tex = r"$\textbf{" + pmw_raw + r"}$"
         log_pmw_tex = r"$\textbf{" + log_pmw_raw + r"}$"
         pmw_md = f"**{pmw_raw}**"
@@ -121,8 +128,8 @@ for f_id in range(1, 30):  # functions 1..29
     q1_10_d, q1_50_d, q1_90_d = f"{q1_10:.1e}", f"{q1_50:.1e}", f"{q1_90:.1e}"
     q2_10_d, q2_50_d, q2_90_d = f"{q2_10:.1e}", f"{q2_50:.1e}", f"{q2_90:.1e}"
 
-    # Bold quantiles logic
-    if bold_row:
+    # Bold quantiles logic based on Mann-Whitney U test significance
+    if bold_pmw:
         if q1_50 == q2_50:
             # LaTeX
             q1_10_tex, q1_50_tex, q1_90_tex = f"\\textbf{{{q1_10_d}}}", f"\\textbf{{{q1_50_d}}}", f"\\textbf{{{q1_90_d}}}"
