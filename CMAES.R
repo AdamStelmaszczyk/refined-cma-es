@@ -354,7 +354,7 @@ cmaes <- function(par, fn, ..., lower, upper, minimum, control=list()) {
                                     1 + 2*max(0, sqrt((mueff-1)/(N+1))-1) + cs)
 
         xmean <- runif(N, lower, upper)
-        sigma <- controlParam("sigma", 0.5)
+        sigma <- controlParam("sigma", 7)
 
         pc <- rep(0.0, N)
         ps <- rep(0.0, N)
