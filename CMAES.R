@@ -127,8 +127,8 @@ cmaes <- function(par, fn, ..., lower, upper, minimum, control=list()) {
   log.bestVal<- controlParam("diag.bestVal", log.all)
 
   ## Strategy parameter settings
-  # lambda      <- controlParam("lambda", 4+floor(3*log(N)))
-  lambda      <- controlParam("lambda", 4*N)
+  lambda      <- controlParam("lambda", 4+floor(3*log(N)))
+  # lambda      <- controlParam("lambda", 4*N)
   maxiter     <- controlParam("maxit", round(budget/lambda))
   mu          <- controlParam("mu", floor(lambda/2))
   weights     <- controlParam("weights", log(mu+1) - log(1:mu))
@@ -142,6 +142,7 @@ cmaes <- function(par, fn, ..., lower, upper, minimum, control=list()) {
                               + (1-1/mucov) * ((2*mucov-1)/((N+2)^2+2*mucov)))
   damps       <- controlParam("damps",
                               1 + 2*max(0, sqrt((mueff-1)/(N+1))-1) + cs)
+  eigen_delay <- controlParam("eigen_delay", max(1, floor(lambda / (ccov * mueff * 10 * N))))
 
   ## Safety checks:
   stopifnot(length(upper) == N)
@@ -307,19 +308,22 @@ cmaes <- function(par, fn, ..., lower, upper, minimum, control=list()) {
     ## Adapt step size sigma:
     sigma <- sigma * exp((norm(ps)/chiN - 1)*cs/damps)
 
-    e <- eigen(C, symmetric=TRUE)
-    eE <- eigen(cov(t(arx)))
-    if (log.eigen)
-      eigen.log[iter,] <- rev(sort(eE$values))
+    if (iter %% eigen_delay == 0 || iter == 1) {
+      e <- eigen(C, symmetric=TRUE)
+      eE <- eigen(cov(t(arx)))
 
-    if (!all(e$values >= sqrt(.Machine$double.eps) * abs(e$values[1]))) {
-      msg <- "Covariance matrix 'C' is numerically not positive definite."
-      break
+      if (log.eigen)
+        eigen.log[iter,] <- rev(sort(eE$values))
+
+      if (!all(e$values >= sqrt(.Machine$double.eps) * abs(e$values[1]))) {
+        msg <- "Covariance matrix 'C' is numerically not positive definite."
+        break
+      }
+
+      B <- e$vectors
+      D <- diag(sqrt(e$values), length(e$values))
+      BD <- B %*% D
     }
-
-    B <- e$vectors
-    D <- diag(sqrt(e$values), length(e$values))
-    BD <- B %*% D
 
     ## break if fit:
     if (arfitness[1] <= stopfitness * fnscale) {
