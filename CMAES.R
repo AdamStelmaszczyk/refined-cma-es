@@ -323,6 +323,9 @@ cmaes <- function(par, fn, ..., lower, upper, minimum, control=list()) {
 
     ## break if fit:
     if (arfitness[1] <= stopfitness * fnscale) {
+      if (log.bestVal) {
+        bestVal.log <- c(bestVal.log, rep(minimum, lambda))
+      }
       msg <- "Stop fitness reached."
       break
     }
