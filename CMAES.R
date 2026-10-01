@@ -196,8 +196,13 @@ cmaes <- function(par, fn, ..., lower, upper, minimum, control=list()) {
     if (log.sigma)
       sigma.log[iter] <- sigma
 
-    if (log.bestVal)
-      bestVal.log <- rbind(bestVal.log,min(suppressWarnings(min(bestVal.log)), min(arfitness)))
+    if (log.bestVal) {
+      cur_min <- min(arfitness)
+      if (length(bestVal.log) > 0) {
+        cur_min <- min(cur_min, tail(bestVal.log, 1))
+      }
+      bestVal.log <- c(bestVal.log, rep(cur_min, lambda))
+    }
 
     ## Generate new population:
     arz <- matrix(rnorm(N*lambda), ncol=lambda)
