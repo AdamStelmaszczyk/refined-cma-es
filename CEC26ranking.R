@@ -10,8 +10,13 @@ algsNames <- args
 NUM_OF_ALGS <- length(algsNames)
 
 globalAlgRanks = list()
+globalAccuracyRanks = list()
+globalSpeedRanks = list()
+
 for(algName in algsNames){
   globalAlgRanks[algName] = 0
+  globalAccuracyRanks[algName] = 0
+  globalSpeedRanks[algName] = 0
 }
 
 DIM = 30
@@ -45,24 +50,38 @@ for (funNmbr in 1:29) {
   }
   optErrPoints = NUM_OF_ALGS*RUNS - rank(bests4runs)
   optSpeedPoints = NUM_OF_ALGS*RUNS - rank(stops4runs)
-  funPoints=optErrPoints+optSpeedPoints
+  funPoints = optErrPoints + optSpeedPoints
 
   algRanks = list()
 
   for (ALG_NR in 1:length(algsNames)) {
-    algName=algsNames[ALG_NR]
-    algRanksSum = sum(funPoints[((RUNS*(ALG_NR-1)+1):(RUNS*ALG_NR))] )
+    algName = algsNames[ALG_NR]
+    runIdxs = ((RUNS*(ALG_NR-1)+1):(RUNS*ALG_NR))
+    accPointsSum = sum(optErrPoints[runIdxs])
+    speedPointsSum = sum(optSpeedPoints[runIdxs])
+    algRanksSum = sum(funPoints[runIdxs])
     algRanks[algName] = algRanksSum
     globalAlgRanks[algName] = globalAlgRanks[algName][[1]] + algRanksSum
+    globalAccuracyRanks[algName] = globalAccuracyRanks[algName][[1]] + accPointsSum
+    globalSpeedRanks[algName] = globalSpeedRanks[algName][[1]] + speedPointsSum
   }
 
   ord = order(unlist(algRanks), decreasing = T)
 
-  cat("F", funNmbr, "ranks:", paste(names(algRanks[ord]), algRanks[ord], sep = " = ", collapse = ", "), "\n")
+  cat(paste0("F", funNmbr), paste(names(algRanks[ord]), algRanks[ord], sep = " = ", collapse = ", "), "\n")
 }
+
 ord = order(unlist(globalAlgRanks), decreasing = T)
-cat("Ranks:", paste(names(globalAlgRanks[ord]), globalAlgRanks[ord], sep = " = ", collapse = ", "), "\n")
+cat("\nTotal score:   ", paste(names(globalAlgRanks[ord]), globalAlgRanks[ord], sep = " = ", collapse = ", "), "\n")
+
+# Accuracy ranking (posortowane wg Accuracy)
+ordAcc = order(unlist(globalAccuracyRanks), decreasing = T)
+cat("Accuracy score:", paste(names(globalAccuracyRanks[ordAcc]), globalAccuracyRanks[ordAcc], sep = " = ", collapse = ", "), "\n")
+
+# Speed ranking (posortowane wg Speed)
+ordSpeed = order(unlist(globalSpeedRanks), decreasing = T)
+cat("Speed score:   ", paste(names(globalSpeedRanks[ordSpeed]), globalSpeedRanks[ordSpeed], sep = " = ", collapse = ", "), "\n")
 
 leaderPoints = unlist(globalAlgRanks)[ord[1]]
 secondPoints = unlist(globalAlgRanks)[ord[2]]
-cat("Leads by:", leaderPoints - secondPoints, "points\n")
+cat("\nLeads by:", leaderPoints - secondPoints, "points\n")
